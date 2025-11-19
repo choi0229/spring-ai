@@ -1,0 +1,6 @@
+POST http://localhost:8080/api/ai/chat
+Content-Type: application/json
+
+{
+  "message": "Spring Boot에 대해 간단히 설명해줘"
+}
