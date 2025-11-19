@@ -1,0 +1,7 @@
+POST http://localhost:8080/api/chat
+Content-Type: application/json
+
+{
+  "message": "방금 설명한 내용을 요약해줘",
+  "conversationId": "30ed914c-1089-4503-beb3-54822515de1d"
+}
