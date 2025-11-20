@@ -1,4 +1,4 @@
-package com.example.demo.ai.service;
+package com.sparta.demo4.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;

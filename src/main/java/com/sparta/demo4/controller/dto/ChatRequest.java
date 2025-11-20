@@ -1,4 +1,4 @@
-package com.example.demo.ai.dto;
+package com.sparta.demo4.controller.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -29,7 +29,8 @@ public class ChatController {
     @PostMapping("/simple")
     public ResponseEntity<ChatResponseV2> simpleChat(@RequestBody Map<String, String> request) {
         String message = request.get("message");
-        ChatResponseV2 response = chatService.chat(message);
+        String modelName = request.get("modelName");
+        ChatResponseV2 response = chatService.chat(message, modelName);
         return ResponseEntity.ok(response);
     }
 
@@ -39,7 +40,7 @@ public class ChatController {
      */
     @PostMapping
     public ResponseEntity<ChatResponseV2> chat(@RequestBody ChatRequestV2 request) throws LimitExceededException {
-        ChatResponseV2 response = chatService.chatWithHistory(request.message(), request.conversationId());
+        ChatResponseV2 response = chatService.chatWithHistory(request.message(), request.conversationId(), request.modelName());
         return ResponseEntity.ok(response);
     }
 
@@ -50,7 +51,8 @@ public class ChatController {
     @PostMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> streamChat(@RequestBody Map<String, String> request) {
         String message = request.get("message");
-        return chatService.chatStream(message);
+        String modelName = request.get("modelName");
+        return chatService.chatStream(message, modelName);
     }
 
     /**

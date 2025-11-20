@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface IChatService {
     // 기본채팅(히스토리 없음)
-    ChatResponseV2 chat(String question);
+    ChatResponseV2 chat(String question, String modelName);
 
     // 대화 히스토리를 유지하는 채팅
-    ChatResponseV2 chatWithHistory(String question, String conversationId) throws LimitExceededException;
+    ChatResponseV2 chatWithHistory(String question, String conversationId, String modelName) throws LimitExceededException;
 
     // 스트리밍 채팅
-    Flux<String> chatStream(String question);
+    Flux<String> chatStream(String question, String modelName);
 
     // 대화 히스토리 조회
     List<Message> getConversationHistory(String conversationId);

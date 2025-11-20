@@ -63,6 +63,9 @@ dependencies {
     implementation platform('org.springframework.ai:spring-ai-bom:1.1.0-M2')
     implementation 'org.springframework.ai:spring-ai-starter-model-anthropic'
     implementation 'net.coobird:thumbnailator:0.4.19'
+
+    // OLLAMA 연동
+    implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
 }
 
 tasks.named('test') {

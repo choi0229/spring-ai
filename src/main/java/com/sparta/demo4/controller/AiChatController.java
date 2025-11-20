@@ -1,8 +1,8 @@
-package com.example.demo.ai.controller;
+package com.sparta.demo4.controller;
 
-import com.example.demo.ai.dto.ChatRequest;
-import com.example.demo.ai.dto.ChatResponse;
-import com.example.demo.ai.service.ChatService;
+import com.sparta.demo4.controller.dto.ChatRequest;
+import com.sparta.demo4.controller.dto.ChatResponse;
+import com.sparta.demo4.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
