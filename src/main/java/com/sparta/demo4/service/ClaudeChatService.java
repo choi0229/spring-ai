@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -49,8 +50,31 @@ public class ClaudeChatService implements IChatService {
     @Override
     public ChatResponseV2 chat(String question, String modelName) {
         ChatClient chatClient = chatClientMap.get(modelName);
-        String response = prompt(question, chatClient);
-        return ChatResponseV2.of(response, UUID.randomUUID().toString(), modelName);
+        // String response = prompt(question, chatClient);
+
+        // 🔥 chatClientResponse()로 받기 (content + context 모두 필요)
+        ChatClient.ChatClientRequestSpec spec = chatClient.prompt()
+                .user(question);
+
+        // Response
+        ChatClientResponse response = spec.call().chatClientResponse();
+
+        // 기본 응답 내용
+        String content = response.chatResponse()
+                .getResult()
+                .getOutput()
+                .getText();
+        // 🔥 context에서 formatted_sources 가져오기
+        String formattedSources = (String) response.context().get("formatted_sources");
+        log.info("=== Content: {} ===", content);
+        log.info("=== Formatted Sources: {} ===", formattedSources);
+        String responseMessage = content;
+
+        // 출처가 있으면 합치기
+        if (formattedSources != null && !formattedSources.isEmpty()) {
+            responseMessage += formattedSources;
+        }
+        return ChatResponseV2.of(responseMessage, UUID.randomUUID().toString(), modelName);
     }
 
     @Override

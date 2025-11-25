@@ -1,5 +1,6 @@
 package com.sparta.demo4.config;
 
+import com.sparta.demo4.aop.advisor.AdvancedRagAdvisor;
 import jakarta.annotation.PostConstruct;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -7,10 +8,16 @@ import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.anthropic.AnthropicChatOptions;
 import org.springframework.ai.anthropic.api.AnthropicApi;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "spring.ai.anthropic")
@@ -61,9 +68,29 @@ public class ChatConfig {
 //
     @Bean(name = "anthropicChatClient")
     public ChatClient anthropicChatClient(
-        @Qualifier("claudeChatModel") AnthropicChatModel chatModel) {
+        @Qualifier("claudeChatModel") AnthropicChatModel chatModel,
+        VectorStore vectorStore) {
+
+        AnthropicChatOptions options = AnthropicChatOptions.builder()
+                .temperature(0.7)
+                .maxTokens(4096)
+                .toolCallbacks(List.of())
+                .build();
+
+        RagConfig config = RagConfig.builder()
+                .topK(10)
+                .similarityThreshold(0.75)
+                .requireDocuments(false)
+                .appendSources(true)
+                .build();
+
         return ChatClient.builder(chatModel)  // 특정 모델 지정
-            .defaultSystem("""
+                .defaultAdvisors(
+                        new AdvancedRagAdvisor(vectorStore, config),
+                        new SimpleLoggerAdvisor()
+                )
+                .defaultOptions(options)
+                .defaultSystem("""
                 당신은 친절하고 도움이 되는 AI 어시스턴트입니다.
                 사용자의 질문에 정확하고 이해하기 쉽게 답변해주세요.
                 """)

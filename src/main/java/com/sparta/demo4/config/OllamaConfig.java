@@ -1,11 +1,13 @@
 package com.sparta.demo4.config;
 
+import com.sparta.demo4.aop.advisor.AdvancedRagAdvisor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -90,9 +92,20 @@ public class OllamaConfig {
     @Primary  // 기본 ChatClient로 사용
     @Bean(name = "ollamaChatClient")
     public ChatClient ollamaChatClient(
-        @Qualifier("ollamaChatModel") OllamaChatModel chatModel) {
+        @Qualifier("ollamaChatModel") OllamaChatModel chatModel,
+        VectorStore vectorStore) {
+
+        RagConfig config = RagConfig.builder()
+                .topK(10)
+                .similarityThreshold(0.75)
+                .requireDocuments(false)
+                .appendSources(true)
+                .build();
 
         return ChatClient.builder(chatModel)  // 특정 모델 지정
+                .defaultAdvisors(
+                        new AdvancedRagAdvisor(vectorStore, config)
+                )
             .defaultSystem("""
                         당신은 친절하고 전문적인 AI 어시스턴트입니다.
                         

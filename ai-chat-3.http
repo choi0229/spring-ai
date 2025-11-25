@@ -1,0 +1,24 @@
+### 심플 채팅 테스트 claude
+POST http://localhost:8080/api/chat/simple
+Content-Type: application/json
+
+{
+  "message": "급여가 뭐야?",
+  "modelName": "anthropic"
+}
+### ollama
+POST http://localhost:8080/api/chat/simple
+Content-Type: application/json
+
+{
+"message": "급여가 뭐야?",
+"modelName": "ollama"
+}
+
+### 1. 날씨 조회
+POST http://localhost:8080/api/function/chat
+Content-Type: application/json
+
+{
+"message": "서울 날씨 알려줘"
+}

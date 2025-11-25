@@ -16,7 +16,7 @@ public class ExecutionTimeAspect {
 
     private final MonitoringProperties monitoringProperties;
 
-    @Around("execution(* com.example.loyalty.service..*(..))")
+    @Around("execution(* com.sparta.demo4.service..*(..))")
     public Object measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
         try {

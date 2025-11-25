@@ -11,6 +11,8 @@ spring:
           max-tokens: 4096
     ollama:
       base-url: http://localhost:11434  # OLLAMA 서버 주소
+      embedding:
+        model: nomic-embed-text
       chat:
         options:
           model: qwen2.5:3b              # 사용할 모델
@@ -63,3 +65,8 @@ monitoring:
 logging:
   level:
     com.example.loyalty: INFO
+    org.springframework.ai: DEBUG
+    org.springframework.ai.mcp: TRACE  # ⭐ TRACE로 상향
+    org.springframework.ai.mcp.client: TRACE  # ⭐ Client 상세 로그
+    io.modelcontextprotocol: DEBUG
+    reactor.netty: DEBUG  # ⭐ 네트워크 로그
