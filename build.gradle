@@ -4,13 +4,16 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.sparta'
+group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-description = 'demo4'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
     }
 }
 
@@ -18,74 +21,62 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('querydslVersion', "5.0.0")
+    set('springAiVersion', "1.1.0-M2")
+}
+
 dependencies {
-    implementation('org.springframework.boot:spring-boot-starter-web') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-    }
-    implementation 'org.springframework.boot:spring-boot-starter-undertow'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation "com.querydsl:querydsl-jpa:${querydslVersion}:jakarta"
 
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
 
-    implementation 'org.flywaydb:flyway-core'
-    implementation 'org.flywaydb:flyway-mysql'
 
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-//    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     compileOnly 'org.projectlombok:lombok'
-
     annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
-    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
-    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+    annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.h2database:h2'
-    testImplementation 'io.rest-assured:rest-assured:5.4.0'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    // rest assured
-    testImplementation 'io.rest-assured:rest-assured:5.4.0'
 
-    // mockito
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
-
-    // ai
-    // implementation platform('org.springframework.ai:spring-ai-bom:1.0.0-M4')
-    implementation platform('org.springframework.ai:spring-ai-bom:1.1.0-M2')
+    implementation platform("org.springframework.ai:spring-ai-bom:${springAiVersion}")
     implementation 'org.springframework.ai:spring-ai-starter-model-anthropic'
-    implementation 'net.coobird:thumbnailator:0.4.19'
-
-    // OLLAMA 연동
     implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
+    implementation 'org.springframework.ai:spring-ai-pgvector-store'
+    // https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-openai
+    implementation 'org.springframework.ai:spring-ai-openai'
+
+    implementation 'org.flywaydb:flyway-core:11.7.2'
+    implementation 'org.flywaydb:flyway-database-postgresql:11.7.2'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
-def generatedQuerydslDir = layout.buildDirectory.dir("generated/querydsl")
-
-tasks.named('compileJava') {
-    options.annotationProcessorGeneratedSourcesDirectory = generatedQuerydslDir.get().asFile
-}
+def generated = "build/generated/querydsl"
 
 sourceSets {
     main {
         java {
-            srcDir generatedQuerydslDir
+            srcDirs += [generated]
         }
     }
 }
 
-tasks.named('clean') {
-    delete generatedQuerydslDir
+tasks.withType(JavaCompile).configureEach {
+    options.generatedSourceOutputDirectory = file(generated)
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
+
+clean.doLast {
+    file(generated).deleteDir()
 }

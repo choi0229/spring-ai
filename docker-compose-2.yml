@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+  # 모델 자동 설치 (한 번만 실행)
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: ollama-init
+    depends_on:
+      - ollama
+    command: >
+      -c "
+        sleep 10 &&
+        ollama pull qwen2.5:3b &&
+        echo 'Setup completed!'
+      "
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    restart: "no"
+
+volumes:
+  ollama_data:
+    driver: local

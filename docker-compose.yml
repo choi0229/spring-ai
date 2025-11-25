@@ -10,5 +10,43 @@ services:
       - ollama_data:/root/.ollama
     restart: unless-stopped
 
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: postgres
+    environment:
+      POSTGRES_DB: teamsparta_vector
+      POSTGRES_USER: rtan
+      POSTGRES_PASSWORD: sparta
+      # 추가 설정
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
+    ports:
+      - "5433:5432"
+    volumes:
+#      - $PATH:$PATH
+#      - HOST_PC_PATH -> 내 PC 저장경로:CONTAINER_PATH -> Container가 실행되면 생성되는 설정파일이나, 주요 데이터가 저장되는 경로
+      - ${DB_HOME}/data/postgres:/var/lib/postgresql/data # Persist data outside the container
+      - ${PROJECT_ROOT}/src/main/resources/db/migration/V2__init.sql:/docker-entrypoint-initdb.d/V2__init.sql
+      # - postgres_data:/var/lib/postgresql/data
+    command: postgres -c shared_preload_libraries=vector
+
+  # Redis 서비스도 함께 정의
+  redis:
+    image: redis:7-alpine
+    container_name: sprain-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   ollama_data:
+    driver: local
+  redis_data:
+    driver: local

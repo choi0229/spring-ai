@@ -1,0 +1,14 @@
+{
+  "issues": [
+    {
+      "severity": "HIGH|MEDIUM|LOW",
+      "line": 줄번호,
+      "message": "이슈 설명",
+      "suggestion": "개선 방법"
+    }
+  ],
+  "improvements": ["개선사항1", "개선사항2", ...],
+  "score": 0-100점수,
+  "improvedCode": "개선된 전체 코드",
+  "summary": "전체 리뷰 요약"
+}

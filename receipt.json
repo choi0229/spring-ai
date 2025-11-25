@@ -1,0 +1,17 @@
+{
+  "storeName": "가게명",
+  "address": "주소",
+  "date": "YYYY-MM-DD",
+  "time": "HH:MM",
+  "items": [
+    {
+      "name": "상품명",
+      "quantity": 1,
+      "price": 10000
+    }
+  ],
+  "subtotal": 10000,
+  "tax": 1000,
+  "total": 11000,
+  "paymentMethod": "카드/현금"
+}

@@ -1,6 +1,26 @@
+### /api/chat/simple
 POST http://localhost:8080/api/ai/chat
 Content-Type: application/json
 
 {
-  "message": "Spring Boot에 대해 간단히 설명해줘"
+  "message": "안녕하세요!"
+}
+
+### Code Review
+POST http://localhost:8080/api/code-review/analyze
+Content-Type: application/json
+
+{
+  "code": "def calculate_sum():\n    total = 0\n    for i in range(1, 101):\n        total = total + i\n    print(total)\n\ncalculate_sum()",
+  "language": "Python",
+  "reviewLevel": "detailed"
+}
+
+###
+### 7. RAG-TEST
+POST http://localhost:8080/api/rag/ask
+Content-Type: application/json
+
+{
+  "question": "급여에 대해서 설명해줘."
 }

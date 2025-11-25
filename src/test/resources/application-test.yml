@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:loyalty-test;MODE=MYSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  flyway:
+    enabled: false
+
+points:
+  default-rate: 0.01
+  vip-rate: 0.02
+  category-rate-map: {}
+  min-usage-amount: 1000
+  min-usage-point: 10
+  expire-days: 30
+  max-balance: 1000000
+
+cart:
+  max-items: 10
+  promotion-multipliers:
+    welcome: 1.2
+
+monitoring:
+  slow-threshold-ms: 1000
