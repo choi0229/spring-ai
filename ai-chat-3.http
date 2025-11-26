@@ -22,3 +22,36 @@ Content-Type: application/json
 {
 "message": "서울 날씨 알려줘"
 }
+
+### 2. 휴가 관련 질문
+POST http://localhost:8080/api/rag/ask
+Content-Type: application/json
+
+{
+"question": "연차는 몇 일인가요?"
+}
+
+### 3. 급여 관련 질문
+POST http://localhost:8080/api/rag/ask
+Content-Type: application/json
+
+{
+"question": "급여는 언제 나오나요?"
+}
+
+### 4. 복합 질문
+POST http://localhost:8080/api/rag/ask
+Content-Type: application/json
+
+{
+"question": "재택 근무는 가능한가요? 조건이 있나요?"
+}
+
+### 5. 출처 포함 질문
+POST http://localhost:8080/api/rag/ask-detailed \
+Content-Type: application/json
+
+{
+"question": "우리 회사의 복리후생에는 어떤 것들이 있나요?"
+}
+

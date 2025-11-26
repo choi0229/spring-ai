@@ -22,7 +22,7 @@ spring:
     vectorstore:
       pgvector:
         initialize-schema: false
-        dimensions: 896       # qwen2.5:0.3b -> 896
+        dimensions: 768       # qwen2.5:0.3b -> 896
         distance-type: cosine  # COSINE_DISTANCE → cosine
         index-type: hnsw
   datasource:
@@ -37,9 +37,9 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
-  flyway:
-    enabled: true
-    locations: classpath:db/migration
+#  flyway:
+#    enabled: true
+#    locations: classpath:db/migration
 
 points:
   default-rate: 0.01

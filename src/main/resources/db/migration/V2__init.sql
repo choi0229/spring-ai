@@ -12,21 +12,9 @@ CREATE TABLE IF NOT EXISTS vector_store
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     content    TEXT NOT NULL,
     metadata JSONB,
-    embedding vector(2048), -- dimensions 확인!: qwen2.5-0.5b: 896
+    embedding vector(768), -- dimensions 확인!
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- ================================================
--- 성능 최적화 인덱스
--- ================================================
--- CREATE INDEX IF NOT EXISTS idx_vector_store_embedding
---     ON vector_store
---     USING ivfflat (embedding vector_cosine_ops)
---     WITH (lists = 100);
-
-CREATE INDEX IF NOT EXISTS idx_vector_store_metadata
-    ON vector_store
-    USING gin (metadata jsonb_path_ops);
+    );
 
 
 -- ================================================
@@ -44,7 +32,7 @@ CREATE TABLE IF NOT EXISTS documents
 
     -- 인덱스를 위한 컬럼 (선택사항)
     CONSTRAINT chk_chunk_count_positive CHECK (chunk_count >= 0)
-);
+    );
 
 -- ================================================
 -- 성능 최적화 인덱스
@@ -66,6 +54,21 @@ CREATE INDEX IF NOT EXISTS idx_documents_type_date
     ON documents(content_type, uploaded_at DESC);
 
 -- ================================================
+-- 성능 최적화 인덱스
+-- ================================================
+-- IVFFlat도 2000 차원 제한이 있습니다.
+-- 해결방법#1: vector_store의 embedding 컬럼의 타입의 차원을 896로 수정
+-- 해결방법#2: 인덱스 생성 무시
+CREATE INDEX idx_vector_store_embedding
+    ON vector_store
+    USING ivfflat (embedding vector_cosine_ops)
+    WITH (lists = 100);
+
+CREATE INDEX IF NOT EXISTS idx_vector_store_metadata
+    ON vector_store
+    USING gin (metadata jsonb_path_ops);
+
+-- ================================================
 -- 코멘트 추가 (선택사항)
 -- ================================================
 COMMENT ON TABLE documents IS '업로드된 문서 정보를 저장하는 테이블';
@@ -83,4 +86,3 @@ COMMENT ON COLUMN documents.metadata IS 'JSON 형태의 추가 메타데이터';
 DO $$
 BEGIN RAISE NOTICE 'Vector store initialized successfully';
 END $$;
-

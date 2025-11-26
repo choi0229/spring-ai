@@ -33,7 +33,7 @@ public class RagService {
         List<Document> relevantDocs = vectorStore.similaritySearch(
                 SearchRequest.builder()
                         .query(question)
-                        .topK(5)
+                        .topK(10)
                         .build()
         );
 

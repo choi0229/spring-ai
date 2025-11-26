@@ -24,7 +24,7 @@ public class VectorStoreConfig {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
         return PgVectorStore.builder(jdbcTemplate, embeddingModel)
-                .dimensions(2048)
+                .dimensions(dimensions)
                 .distanceType(PgVectorStore.PgDistanceType.COSINE_DISTANCE)
                 .indexType(PgVectorStore.PgIndexType.HNSW)
                 .initializeSchema(false)

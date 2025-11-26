@@ -1,7 +1,6 @@
 package com.sparta.demo4.common.ai;
 
-import com.sparta.demo4.common.ai.dto.WeatherRequest;
-import com.sparta.demo4.common.ai.dto.WeatherResponse;
+import com.sparta.demo4.common.ai.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;
