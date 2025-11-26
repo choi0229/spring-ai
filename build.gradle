@@ -58,6 +58,9 @@ dependencies {
     implementation 'org.flywaydb:flyway-database-postgresql:11.7.2'
 
     implementation 'net.coobird:thumbnailator:0.4.20'
+
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
 }
 
 tasks.named('test') {

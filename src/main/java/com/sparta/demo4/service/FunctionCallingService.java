@@ -34,7 +34,7 @@ public class FunctionCallingService {
         log.info("Function Calling 응답 완료");
         return response;
     }
-    
+
     /**
      * 특정 함수만 사용
      * @Tool 어노테이션의 name 속성으로 지정하거나, 메서드명이 기본 이름

@@ -92,8 +92,8 @@ public class OllamaConfig {
     @Primary  // 기본 ChatClient로 사용
     @Bean(name = "ollamaChatClient")
     public ChatClient ollamaChatClient(
-        @Qualifier("ollamaChatModel") OllamaChatModel chatModel,
-        VectorStore vectorStore) {
+            @Qualifier("ollamaChatModel") OllamaChatModel chatModel,
+            VectorStore vectorStore) {
 
         RagConfig config = RagConfig.builder()
                 .topK(10)
@@ -106,7 +106,7 @@ public class OllamaConfig {
                 .defaultAdvisors(
                         new AdvancedRagAdvisor(vectorStore, config)
                 )
-            .defaultSystem("""
+                .defaultSystem("""
                         당신은 친절하고 전문적인 AI 어시스턴트입니다.
                         
                         다음 원칙을 따라 응답해주세요:
@@ -118,6 +118,6 @@ public class OllamaConfig {
                         
                         한국어로 답변하며, 존댓말을 사용합니다.
                         """)
-            .build();
+                .build();
     }
 }
