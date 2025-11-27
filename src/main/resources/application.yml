@@ -25,6 +25,15 @@ spring:
         dimensions: 896       # qwen2.5:0.3b -> 896
         distance-type: cosine  # COSINE_DISTANCE → cosine
         index-type: hnsw
+    mcp:
+      client:
+        type: SYNC
+        toolcallback:
+          enabled: true
+        streamable-http:
+          connections:
+            weather-server:
+              url: http://localhost:8081
   datasource:
     url: jdbc:postgresql://localhost:5433/teamsparta_vector
     username: rtan

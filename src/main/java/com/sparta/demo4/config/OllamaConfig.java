@@ -40,7 +40,7 @@ public class OllamaConfig {
     /**
      * OllamaChatModel 생성
      */
-    @Primary
+    // @Primary
     @Bean(name = "ollamaChatModel")
     public OllamaChatModel ollamaChatModel(
             OllamaApi ollamaApi) {
@@ -89,7 +89,7 @@ public class OllamaConfig {
 //    }
 
     // ✅ ollamaChatModel을 명시적으로 주입
-    @Primary  // 기본 ChatClient로 사용
+    // @Primary  // 기본 ChatClient로 사용
     @Bean(name = "ollamaChatClient")
     public ChatClient ollamaChatClient(
             @Qualifier("ollamaChatModel") OllamaChatModel chatModel,
