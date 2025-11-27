@@ -1,0 +1,51 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: weather-mcp-server
+  config:
+    import: optional:file:.env[.properties]
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: weather-mcp-server
+        version: 1.0.0
+        type: SYNC
+        protocol: STREAMABLE
+        instructions: "??? ?? API MCP Server"
+
+        capabilities:
+          tool: true
+          resource: true
+          prompt: true
+          completion: false
+
+external:
+  api:
+    weather:
+      url: https://apihub.kma.go.kr/
+      api-key: ${OPEN_WEATHER_API_KEY:FAVWlSB7Qa6FVpUgezGuHw}
+
+# ?? ?? ??
+company:
+  docs:
+    base-path: ${DOCUMENT_BASE_PATH}
+    cache:
+      enabled: true
+      ttl: 3600  # 1?? ??
+
+# HTTP Server ????? ??
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /actuator
+
+logging:
+  level:
+    org.springframework: INFO
+    org.springframework.ai.mcp: DEBUG
+    org.weather.mcp: DEBUG
